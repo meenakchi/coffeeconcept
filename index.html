@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>coffee near me – this weekend's menu, pre-order on Telegram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#d9cdc1;--card:#e8dfd4;--ink:#1d140f;--mute:#5e4e43;--line:#b7a797;--accent:#8a4a17;--btn:#1d140f;--on:#f3ebe1;
+--head:"Bricolage Grotesque",Arial,sans-serif;--body:"Hanken Grotesk",system-ui,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a120e;--card:#251a14;--ink:#f3ebe1;--mute:#b3a193;--line:#44332a;--accent:#e0a35c;--btn:#f3ebe1;--on:#1a120e}}
+:root[data-theme="dark"]{--bg:#1a120e;--card:#251a14;--ink:#f3ebe1;--mute:#b3a193;--line:#44332a;--accent:#e0a35c;--btn:#f3ebe1;--on:#1a120e}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+h1,h2,h3{font-family:var(--head);margin:0;line-height:1}
+.w{width:min(1060px,100% - 40px);margin:0 auto}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 24px;border-radius:99px;border:1.5px solid var(--btn);background:var(--btn);color:var(--on);font:600 15px var(--body);text-decoration:none;cursor:pointer}
+.btn:active{transform:scale(.97)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:var(--bg);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;min-height:64px}
+.brand{font:800 21px var(--head);text-decoration:none;color:inherit;letter-spacing:-.02em}
+.nav .btn{min-height:40px;padding:0 18px}
+
+.hero{padding:64px 0 44px}
+.hero h1{font-size:clamp(52px,11vw,132px);font-weight:800;letter-spacing:-.045em}
+.date{display:block;margin-top:10px;color:var(--accent);font:800 clamp(28px,5.4vw,60px)/1 var(--head);letter-spacing:-.03em}
+.hero p{max-width:50ch;margin:26px 0 28px;font-size:18px;color:var(--mute)}
+.hero .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.hero small{color:var(--mute);font-size:14px}
+
+.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:48px;align-items:start;padding:28px 0 72px}
+.list{border-top:2px solid var(--ink)}
+.item{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 0;border-bottom:1px solid var(--line)}
+.item h3{font-size:clamp(22px,3.2vw,32px);font-weight:700;letter-spacing:-.025em}
+.item small{display:block;margin-top:6px;color:var(--mute);font-size:14px}
+.item .pr{font:700 18px var(--head);margin-right:6px}
+.item.out h3,.item.out .pr{text-decoration:line-through;opacity:.45}
+.buy{display:flex;align-items:center;gap:14px;flex:none}
+.step{display:flex;align-items:center;border:1.5px solid var(--ink);border-radius:99px}
+.step button{width:42px;height:42px;border:0;background:none;color:var(--ink);font:600 20px var(--body);cursor:pointer;border-radius:99px}
+.step button:disabled{opacity:.3;cursor:default}
+.step output{min-width:24px;text-align:center;font-weight:600}
+.soldout{font-weight:600;color:var(--mute);font-size:14px}
+.foot{margin-top:16px;font-size:14px;color:var(--mute)}
+.lf{display:flex;align-items:center;gap:18px;min-width:0}
+.ico{flex:none;width:76px;height:76px;display:grid;place-items:center;border-radius:22px;background:var(--card);border:1px solid var(--line)}
+.ico svg{width:54px;height:54px;overflow:visible}
+.ico.hop svg{animation:hop .5s ease-out}
+@keyframes hop{0%{transform:none}30%{transform:translateY(-12px) scale(.94,1.08)}60%{transform:translateY(0) scale(1.08,.92)}100%{transform:none}}
+.steam{fill:none;stroke:#9a8c7e;stroke-width:2.5;stroke-linecap:round;animation:rise 2.4s ease-in-out infinite}
+.steam.s2{animation-delay:1.2s}
+@keyframes rise{0%{opacity:0;transform:translateY(4px)}40%{opacity:.9}100%{opacity:0;transform:translateY(-8px)}}
+.item.out .ico{opacity:.45;filter:grayscale(1)}
+
+.cart{position:sticky;top:84px;background:var(--card);border:1.5px solid var(--ink);border-radius:20px;padding:24px}
+.cart h2{font-size:28px;font-weight:700;letter-spacing:-.025em;margin-bottom:14px}
+.cart ul{list-style:none;margin:0;padding:0}
+.cart li{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.empty{color:var(--mute);font-size:15px;margin:0 0 6px}
+.tot{display:flex;justify-content:space-between;font:700 24px var(--head);margin:14px 0 18px}
+fieldset{border:0;padding:0;margin:0 0 16px}
+legend{font:600 14px var(--body);margin-bottom:8px;padding:0}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{position:relative}
+.opt input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.opt span{display:block;padding:9px 18px;min-height:42px;border:1.5px solid var(--line);border-radius:99px;font-size:15px;background:var(--bg)}
+.opt input:checked+span{background:var(--btn);color:var(--on);border-color:var(--btn)}
+.opt input:focus-visible+span{outline:3px solid var(--accent);outline-offset:2px}
+.cart label.t{display:block;font:600 14px var(--body);margin-bottom:6px}
+.cart input[type=text]{width:100%;min-height:46px;padding:0 14px;margin-bottom:18px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:16px var(--body)}
+.cart .btn{width:100%}
+.cart .btn[aria-disabled=true]{opacity:.4;pointer-events:none}
+.hint{margin:12px 0 0;font-size:13.5px;color:var(--mute)}
+@media(max-width:860px){.grid{grid-template-columns:1fr;gap:36px}.cart{position:static}.item{align-items:flex-start;flex-direction:column;gap:12px}.buy{width:100%;justify-content:space-between}}
+footer{padding:26px 0 40px;border-top:1px solid var(--line);font-size:13.5px;color:var(--mute)}
+footer .w{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
+footer a{color:inherit}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}.steam,.ico.hop svg{animation:none}}
+</style>
+</head>
+<body>
+<header><div class="w nav"><a class="brand" href="#top">coffee near me</a><a class="btn" href="#order">Pre-order</a></div></header>
+
+<main id="top">
+<section class="w hero">
+  <h1>This weekend’s menu</h1>
+  <span class="date" id="wk"></span>
+  <p>The bakes change every weekend, so this page does too. Pick what you want, send it on Telegram, and we’ll bake enough for you.</p>
+  <div class="row"><a class="btn" href="#order">See what’s baking</a><small id="cut"></small></div>
+</section>
+
+<div class="w grid" id="order">
+  <div>
+    <div class="list" id="list"></div>
+    <p class="foot">Prices in SGD. Limited batches, while stocks last. Sold-out items get crossed off.</p>
+  </div>
+  <aside class="cart" aria-live="polite">
+    <h2>Your pre-order</h2>
+    <ul id="lines"></ul>
+    <p class="empty" id="empty">Nothing yet. Tap + on anything you want.</p>
+    <div class="tot"><span>Total</span><span id="total">$0.00</span></div>
+    <fieldset><legend>Collect on</legend><div class="opts" id="days"></div></fieldset>
+    <label class="t" for="nm">Your name</label>
+    <input type="text" id="nm" placeholder="So we know whose bag is whose" autocomplete="given-name">
+    <a class="btn" id="send" href="#" target="_blank" rel="noreferrer" aria-disabled="true">Send on Telegram</a>
+    <p class="hint">This opens Telegram with your order already written. Pickup time and payment are confirmed in the chat.</p>
+  </aside>
+</div>
+</main>
+
+<footer><div class="w"><span>© <span id="yr"></span> coffee near me</span><span>Concept preview, not the official site. Menu based on a recent Instagram story.</span></div></footer>
+
+<script>
+/* ===== EDIT THESE EACH WEEK ===== */
+const CFG={tg:'YOUR_TELEGRAM_USERNAME',cutoff:'Friday 6pm',days:['Saturday','Sunday']};
+const MENU=[
+ {n:'Dark Chocolate Banana Bread',p:4.5,ic:'loaf'},
+ {n:'Fudge Brownie',p:3,ic:'brownie'},
+ {n:'Savoury Scone',p:4.3,ic:'scone'},
+ {n:'Earl Grey Madeleine',p:3,note:'Set of 3 for $3',unit:'set of 3',ic:'madeleine'},
+ {n:'Creamy Tomato Basil Pasta',p:6,ic:'pasta'},
+ {n:'Tiramisu Basque',p:6.3,ic:'tiramisu'}/* add  ,out:true  to cross an item off. ic = icon: loaf brownie scone madeleine pasta tiramisu plate */
+];
+/* ================================ */
+const ICONS={
+loaf:`<svg viewBox="0 0 64 64"><path d="M6 30Q6 18 20 18H44Q58 18 58 30V46Q58 51 53 51H11Q6 51 6 46Z" fill="#b57a42"/><path d="M6 30Q6 18 20 18H44Q58 18 58 30Z" fill="#7a4a24"/><g fill="#3a2015"><circle cx="18" cy="35" r="2.6"/><circle cx="32" cy="40" r="2.6"/><circle cx="44" cy="34" r="2.6"/><circle cx="24" cy="45" r="2.2"/><circle cx="48" cy="44" r="2.2"/></g></svg>`,
+brownie:`<svg viewBox="0 0 64 64"><rect x="8" y="22" width="48" height="28" rx="5" fill="#3b2118"/><rect x="8" y="22" width="48" height="11" rx="5" fill="#5f3828"/><path d="M16 27l6 2 5-3 7 3 6-2 6 2" stroke="#8a5a43" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M8 40H56" stroke="#5f3828" stroke-width="1.5"/></svg>`,
+scone:`<svg viewBox="0 0 64 64"><path d="M8 40Q8 50 32 50T56 40Q56 32 32 32T8 40Z" fill="#c78f45"/><path d="M10 38Q10 26 32 26T54 38Q54 44 32 44T10 38Z" fill="#e6b96f"/><g fill="#4f7a3a"><ellipse cx="24" cy="35" rx="3" ry="1.4" transform="rotate(-20 24 35)"/><ellipse cx="38" cy="32" rx="3" ry="1.4" transform="rotate(15 38 32)"/><ellipse cx="44" cy="38" rx="3" ry="1.4"/></g></svg>`,
+madeleine:`<svg viewBox="0 0 64 64"><path d="M32 10C50 10 58 30 51 47Q32 56 13 47C6 30 14 10 32 10Z" fill="#e6b45f"/><path d="M32 14V50M22 16L20 49M42 16L44 49M14 24L18 47M50 24L46 47" stroke="#b9803a" stroke-width="1.6" stroke-linecap="round"/><ellipse cx="32" cy="50" rx="19" ry="4" fill="#c9954a"/></svg>`,
+pasta:`<svg viewBox="0 0 64 64"><path class="steam" d="M24 16q-4-4 0-8"/><path class="steam s2" d="M38 16q-4-4 0-8"/><path d="M6 34H58Q56 56 32 56T6 34Z" fill="#f2ebdf"/><ellipse cx="32" cy="34" rx="25" ry="9" fill="#d9573a"/><path d="M16 34q6-6 12 0t12 0 10 0M20 30q6-4 12 0t10 0" stroke="#f0a27a" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M30 30q5-9 12-4-3 8-12 4Z" fill="#3f7d3a"/></svg>`,
+tiramisu:`<svg viewBox="0 0 64 64"><path d="M8 48V30Q32 14 56 30V48Z" fill="#f0e2c6"/><path d="M8 30Q32 14 56 30Q54 38 32 35Q10 38 8 30Z" fill="#5a3320"/><path d="M8 40H56" stroke="#c9a46e" stroke-width="2"/><g fill="#8a5a3a"><circle cx="22" cy="28" r="1.3"/><circle cx="34" cy="25" r="1.3"/><circle cx="44" cy="29" r="1.3"/></g></svg>`,
+plate:`<svg viewBox="0 0 64 64"><circle cx="32" cy="34" r="22" fill="#f2ebdf"/><circle cx="32" cy="34" r="14" fill="none" stroke="#c9b9a4" stroke-width="2"/><path d="M26 16v10M32 16v10M38 16v10" stroke="#9a8c7e" stroke-width="2" stroke-linecap="round"/></svg>`};
+const $=s=>document.querySelector(s),money=n=>'$'+n.toFixed(2);
+const q=MENU.map(()=>0);let day=CFG.days[0];
+
+// this weekend's dates (auto)
+const now=new Date(),dw=now.getDay(),sat=new Date(now);sat.setDate(now.getDate()+(dw==0?-1:6-dw));
+const sun=new Date(sat);sun.setDate(sat.getDate()+1);
+const f=d=>d.toLocaleDateString('en-SG',{day:'numeric',month:'short'});
+$('#wk').textContent='Sat '+f(sat)+' – Sun '+f(sun);
+$('#cut').textContent='Pre-orders close '+CFG.cutoff+'.';
+$('#yr').textContent=now.getFullYear();
+
+$('#list').innerHTML=MENU.map((m,i)=>`<article class="item${m.out?' out':''}"><div class="lf"><span class="ico" id="ic${i}" aria-hidden="true">${ICONS[m.ic]||ICONS.plate}</span><div><h3>${m.n}</h3>${m.note?`<small>${m.note}</small>`:''}</div></div>
+<div class="buy"><span class="pr">${money(m.p)}</span>${m.out?'<span class="soldout">Sold out</span>':`<div class="step" role="group" aria-label="${m.n} quantity"><button type="button" data-i="${i}" data-d="-1" aria-label="Remove one ${m.n}" disabled>−</button><output id="q${i}">0</output><button type="button" data-i="${i}" data-d="1" aria-label="Add one ${m.n}">+</button></div>`}</div></article>`).join('');
+$('#days').innerHTML=CFG.days.map((d,i)=>`<label class="opt"><input type="radio" name="day" value="${d}" ${i?'':'checked'}><span>${d}</span></label>`).join('');
+
+$('#list').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;q[i]=Math.max(0,Math.min(20,q[i]+ +b.dataset.d));
+ $('#q'+i).textContent=q[i];const ic=$('#ic'+i);ic.classList.remove('hop');void ic.offsetWidth;ic.classList.add('hop');b.parentNode.querySelector('[data-d="-1"]').disabled=!q[i];draw()};
+document.addEventListener('change',e=>{if(e.target.name=='day'){day=e.target.value;draw()}});
+$('#nm').oninput=draw;
+
+function label(m,n){return m.unit?`${n} × ${m.unit}`:`${n} × ${m.n}`}
+function draw(){
+ const rows=MENU.map((m,i)=>({m,n:q[i]})).filter(r=>r.n);
+ $('#lines').innerHTML=rows.map(({m,n})=>`<li><span>${m.unit?`${n} × ${m.n} (${m.unit})`:`${n} × ${m.n}`}</span><b>${money(m.p*n)}</b></li>`).join('');
+ $('#empty').hidden=rows.length>0;
+ const tot=rows.reduce((a,{m,n})=>a+m.p*n,0);$('#total').textContent=money(tot);
+ const s=$('#send');
+ if(!rows.length){s.setAttribute('aria-disabled','true');s.href='#';return}
+ s.removeAttribute('aria-disabled');
+ const nm=$('#nm').value.trim();
+ const msg=`Hi coffee near me! Pre-order for ${day} ${f(day=='Sunday'?sun:sat)}:\n`+rows.map(({m,n},i)=>`${i+1}. ${m.unit?`${n} × ${m.n} (${m.unit})`:`${n} × ${m.n}`} – ${money(m.p*n)}`).join('\n')+`\n\nTotal: ${money(tot)}`+(nm?`\nName: ${nm}`:'');
+ s.href='https://t.me/'+CFG.tg+'?text='+encodeURIComponent(msg);
+}
+draw();
+</script>
+</body>
+</html>
