@@ -35,7 +35,8 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:va
 .hero small{color:var(--mute);font-size:14px}
 
 .grid{display:grid;grid-template-columns:1.3fr .7fr;gap:48px;align-items:start;padding:28px 0 72px}
-.list{border-top:2px solid var(--ink)}
+.list{border-top:2px solid var(--ink);min-height:120px}
+.loading{padding:28px 0;color:var(--mute)}
 .item{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 0;border-bottom:1px solid var(--line)}
 .item h3{font-size:clamp(22px,3.2vw,32px);font-weight:700;letter-spacing:-.025em}
 .item small{display:block;margin-top:6px;color:var(--mute);font-size:14px}
@@ -77,6 +78,7 @@ legend{font:600 14px var(--body);margin-bottom:8px;padding:0}
 .cart .btn{width:100%}
 .cart .btn[aria-disabled=true]{opacity:.4;pointer-events:none}
 .hint{margin:12px 0 0;font-size:13.5px;color:var(--mute)}
+.demo{margin:12px 0 0;padding:10px 12px;border:1.5px dashed var(--accent);border-radius:12px;font-size:13px;color:var(--accent)}
 @media(max-width:860px){.grid{grid-template-columns:1fr;gap:36px}.cart{position:static}.item{align-items:flex-start;flex-direction:column;gap:12px}.buy{width:100%;justify-content:space-between}}
 footer{padding:26px 0 40px;border-top:1px solid var(--line);font-size:13.5px;color:var(--mute)}
 footer .w{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
@@ -97,7 +99,7 @@ footer a{color:inherit}
 
 <div class="w grid" id="order">
   <div>
-    <div class="list" id="list"></div>
+    <div class="list" id="list"><p class="loading">Loading this weekend’s menu…</p></div>
     <p class="foot">Prices in SGD. Limited batches, while stocks last. Sold-out items get crossed off.</p>
   </div>
   <aside class="cart" aria-live="polite">
@@ -110,6 +112,7 @@ footer a{color:inherit}
     <input type="text" id="nm" placeholder="So we know whose bag is whose" autocomplete="given-name">
     <a class="btn" id="send" href="#" target="_blank" rel="noreferrer" aria-disabled="true">Send on Telegram</a>
     <p class="hint">This opens Telegram with your order already written. Pickup time and payment are confirmed in the chat.</p>
+    <p class="demo" id="demo" hidden>Concept preview: the Telegram handle is a placeholder, so this button won’t reach the cafe yet.</p>
   </aside>
 </div>
 </main>
@@ -117,17 +120,32 @@ footer a{color:inherit}
 <footer><div class="w"><span>© <span id="yr"></span> coffee near me</span><span>Concept preview, not the official site. Menu based on a recent Instagram story.</span></div></footer>
 
 <script>
-/* ===== EDIT THESE EACH WEEK ===== */
-const CFG={tg:'YOUR_TELEGRAM_USERNAME',cutoff:'Friday 6pm',days:['Saturday','Sunday']};
-const MENU=[
- {n:'Dark Chocolate Banana Bread',p:4.5,ic:'loaf'},
+/* =====================================================================
+   WEEKLY SETUP
+   Option A (no code): put your Google Sheet's published CSV link in SHEET_URL.
+     Sheet columns, row 1 = headers, in this order:
+       name | price | note | unit | icon | soldout
+     e.g.  Earl Grey Madeleine | 3 | Set of 3 for $3 | set of 3 | madeleine |
+     icon options: loaf brownie scone madeleine pasta tiramisu plate
+     soldout: type TRUE to cross an item off, leave blank otherwise.
+   Option B: leave SHEET_URL empty and edit FALLBACK_MENU below.
+   (FALLBACK_MENU is also used if the sheet can't be loaded.)
+   ===================================================================== */
+const CFG={
+  tg:'YOUR_TELEGRAM_USERNAME',   // username only, no @
+  cutoff:'Friday 6pm',
+  days:['Saturday','Sunday'],
+SHEET_URL:'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXlXTTO3iypMEdh7Tndox-OETOQMgM_iZ0yLNGidGTeIth4vfeyYgc5wXPgXoex_qRbg1xov3EFzsm/pub?output=csv'};
+const FALLBACK_MENU=[
+ {n:' Chocolate Banana Bread',p:4.5,ic:'loaf'},
  {n:'Fudge Brownie',p:3,ic:'brownie'},
  {n:'Savoury Scone',p:4.3,ic:'scone'},
  {n:'Earl Grey Madeleine',p:3,note:'Set of 3 for $3',unit:'set of 3',ic:'madeleine'},
  {n:'Creamy Tomato Basil Pasta',p:6,ic:'pasta'},
- {n:'Tiramisu Basque',p:6.3,ic:'tiramisu'}/* add  ,out:true  to cross an item off. ic = icon: loaf brownie scone madeleine pasta tiramisu plate */
+ {n:'T Basque',p:6.3,ic:'tiramisu'}
 ];
-/* ================================ */
+/* ===================================================================== */
+
 const ICONS={
 loaf:`<svg viewBox="0 0 64 64"><path d="M6 30Q6 18 20 18H44Q58 18 58 30V46Q58 51 53 51H11Q6 51 6 46Z" fill="#b57a42"/><path d="M6 30Q6 18 20 18H44Q58 18 58 30Z" fill="#7a4a24"/><g fill="#3a2015"><circle cx="18" cy="35" r="2.6"/><circle cx="32" cy="40" r="2.6"/><circle cx="44" cy="34" r="2.6"/><circle cx="24" cy="45" r="2.2"/><circle cx="48" cy="44" r="2.2"/></g></svg>`,
 brownie:`<svg viewBox="0 0 64 64"><rect x="8" y="22" width="48" height="28" rx="5" fill="#3b2118"/><rect x="8" y="22" width="48" height="11" rx="5" fill="#5f3828"/><path d="M16 27l6 2 5-3 7 3 6-2 6 2" stroke="#8a5a43" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M8 40H56" stroke="#5f3828" stroke-width="1.5"/></svg>`,
@@ -136,40 +154,109 @@ madeleine:`<svg viewBox="0 0 64 64"><path d="M32 10C50 10 58 30 51 47Q32 56 13 4
 pasta:`<svg viewBox="0 0 64 64"><path class="steam" d="M24 16q-4-4 0-8"/><path class="steam s2" d="M38 16q-4-4 0-8"/><path d="M6 34H58Q56 56 32 56T6 34Z" fill="#f2ebdf"/><ellipse cx="32" cy="34" rx="25" ry="9" fill="#d9573a"/><path d="M16 34q6-6 12 0t12 0 10 0M20 30q6-4 12 0t10 0" stroke="#f0a27a" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M30 30q5-9 12-4-3 8-12 4Z" fill="#3f7d3a"/></svg>`,
 tiramisu:`<svg viewBox="0 0 64 64"><path d="M8 48V30Q32 14 56 30V48Z" fill="#f0e2c6"/><path d="M8 30Q32 14 56 30Q54 38 32 35Q10 38 8 30Z" fill="#5a3320"/><path d="M8 40H56" stroke="#c9a46e" stroke-width="2"/><g fill="#8a5a3a"><circle cx="22" cy="28" r="1.3"/><circle cx="34" cy="25" r="1.3"/><circle cx="44" cy="29" r="1.3"/></g></svg>`,
 plate:`<svg viewBox="0 0 64 64"><circle cx="32" cy="34" r="22" fill="#f2ebdf"/><circle cx="32" cy="34" r="14" fill="none" stroke="#c9b9a4" stroke-width="2"/><path d="M26 16v10M32 16v10M38 16v10" stroke="#9a8c7e" stroke-width="2" stroke-linecap="round"/></svg>`};
-const $=s=>document.querySelector(s),money=n=>'$'+n.toFixed(2);
-const q=MENU.map(()=>0);let day=CFG.days[0];
 
-// this weekend's dates (auto)
-const now=new Date(),dw=now.getDay(),sat=new Date(now);sat.setDate(now.getDate()+(dw==0?-1:6-dw));
+const $=s=>document.querySelector(s),money=n=>'$'+n.toFixed(2);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let MENU=[],q=[],day=CFG.days[0];
+
+/* ---- upcoming weekend dates (auto; on Sunday it rolls to NEXT weekend) ---- */
+const now=new Date(),dw=now.getDay();
+const sat=new Date(now);sat.setDate(now.getDate()+(dw===0?6:6-dw));
 const sun=new Date(sat);sun.setDate(sat.getDate()+1);
 const f=d=>d.toLocaleDateString('en-SG',{day:'numeric',month:'short'});
 $('#wk').textContent='Sat '+f(sat)+' – Sun '+f(sun);
 $('#cut').textContent='Pre-orders close '+CFG.cutoff+'.';
 $('#yr').textContent=now.getFullYear();
+$('#days').innerHTML=CFG.days.map((d,i)=>`<label class="opt"><input type="radio" name="day" value="${esc(d)}" ${i?'':'checked'}><span>${esc(d)}</span></label>`).join('');
 
-$('#list').innerHTML=MENU.map((m,i)=>`<article class="item${m.out?' out':''}"><div class="lf"><span class="ico" id="ic${i}" aria-hidden="true">${ICONS[m.ic]||ICONS.plate}</span><div><h3>${m.n}</h3>${m.note?`<small>${m.note}</small>`:''}</div></div>
-<div class="buy"><span class="pr">${money(m.p)}</span>${m.out?'<span class="soldout">Sold out</span>':`<div class="step" role="group" aria-label="${m.n} quantity"><button type="button" data-i="${i}" data-d="-1" aria-label="Remove one ${m.n}" disabled>−</button><output id="q${i}">0</output><button type="button" data-i="${i}" data-d="1" aria-label="Add one ${m.n}">+</button></div>`}</div></article>`).join('');
-$('#days').innerHTML=CFG.days.map((d,i)=>`<label class="opt"><input type="radio" name="day" value="${d}" ${i?'':'checked'}><span>${d}</span></label>`).join('');
+/* ---- placeholder warning so it never ships by accident ---- */
+if(CFG.tg==='YOUR_TELEGRAM_USERNAME'){
+  $('#demo').hidden=false;
+  console.warn('[menu] CFG.tg is still the placeholder. Set the real Telegram username before going live.');
+}
 
-$('#list').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;q[i]=Math.max(0,Math.min(20,q[i]+ +b.dataset.d));
- $('#q'+i).textContent=q[i];const ic=$('#ic'+i);ic.classList.remove('hop');void ic.offsetWidth;ic.classList.add('hop');b.parentNode.querySelector('[data-d="-1"]').disabled=!q[i];draw()};
-document.addEventListener('change',e=>{if(e.target.name=='day'){day=e.target.value;draw()}});
+/* ---- tiny CSV parser (handles quotes + commas inside names) ---- */
+function parseCSV(t){
+  const rows=[];let r=[],c='',inQ=false;
+  for(let i=0;i<t.length;i++){
+    const ch=t[i];
+    if(inQ){
+      if(ch==='"'){ if(t[i+1]==='"'){c+='"';i++} else inQ=false } else c+=ch;
+    }else if(ch==='"') inQ=true;
+    else if(ch===','){r.push(c);c=''}
+    else if(ch==='\n'||ch==='\r'){
+      if(ch==='\r'&&t[i+1]==='\n')i++;
+      r.push(c);rows.push(r);r=[];c='';
+    }else c+=ch;
+  }
+  if(c||r.length){r.push(c);rows.push(r)}
+  return rows;
+}
+
+async function loadMenu(){
+  if(!CFG.SHEET_URL) return FALLBACK_MENU;
+  try{
+    const sep=CFG.SHEET_URL.includes('?')?'&':'?';
+    const res=await fetch(CFG.SHEET_URL+sep+'t='+Date.now());
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const rows=parseCSV(await res.text()).slice(1);
+    const items=rows.filter(r=>(r[0]||'').trim()).map(r=>{
+      const [n,p,note,unit,ic,out]=r.map(s=>(s||'').trim());
+      return {
+        n,
+        p:parseFloat(String(p).replace(/[^0-9.]/g,''))||0,
+        note:note||undefined,
+        unit:unit||undefined,
+        ic:ICONS[ic]?ic:'plate',
+        out:/^(true|yes|y|x|1)$/i.test(out)
+      };
+    });
+    if(!items.length) throw new Error('Sheet has no items');
+    return items;
+  }catch(err){
+    console.warn('[menu] Could not load the Google Sheet, using the built-in menu instead.',err);
+    return FALLBACK_MENU;
+  }
+}
+
+function render(){
+  q=MENU.map(()=>0);
+  $('#list').innerHTML=MENU.map((m,i)=>`<article class="item${m.out?' out':''}"><div class="lf"><span class="ico" id="ic${i}" aria-hidden="true">${ICONS[m.ic]||ICONS.plate}</span><div><h3>${esc(m.n)}</h3>${m.note?`<small>${esc(m.note)}</small>`:''}</div></div>
+<div class="buy"><span class="pr">${money(m.p)}</span>${m.out?'<span class="soldout">Sold out</span>':`<div class="step" role="group" aria-label="${esc(m.n)} quantity"><button type="button" data-i="${i}" data-d="-1" aria-label="Remove one ${esc(m.n)}" disabled>−</button><output id="q${i}">0</output><button type="button" data-i="${i}" data-d="1" aria-label="Add one ${esc(m.n)}">+</button></div>`}</div></article>`).join('');
+  draw();
+}
+
+$('#list').onclick=e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const i=+b.dataset.i;
+  q[i]=Math.max(0,Math.min(20,q[i]+ +b.dataset.d));
+  $('#q'+i).textContent=q[i];
+  const ic=$('#ic'+i);ic.classList.remove('hop');void ic.offsetWidth;ic.classList.add('hop');
+  b.parentNode.querySelector('[data-d="-1"]').disabled=!q[i];
+  draw();
+};
+document.addEventListener('change',e=>{if(e.target.name==='day'){day=e.target.value;draw()}});
 $('#nm').oninput=draw;
 
-function label(m,n){return m.unit?`${n} × ${m.unit}`:`${n} × ${m.n}`}
+const line=(m,n)=>m.unit?`${n} × ${m.n} (${m.unit})`:`${n} × ${m.n}`;
+
 function draw(){
- const rows=MENU.map((m,i)=>({m,n:q[i]})).filter(r=>r.n);
- $('#lines').innerHTML=rows.map(({m,n})=>`<li><span>${m.unit?`${n} × ${m.n} (${m.unit})`:`${n} × ${m.n}`}</span><b>${money(m.p*n)}</b></li>`).join('');
- $('#empty').hidden=rows.length>0;
- const tot=rows.reduce((a,{m,n})=>a+m.p*n,0);$('#total').textContent=money(tot);
- const s=$('#send');
- if(!rows.length){s.setAttribute('aria-disabled','true');s.href='#';return}
- s.removeAttribute('aria-disabled');
- const nm=$('#nm').value.trim();
- const msg=`Hi coffee near me! Pre-order for ${day} ${f(day=='Sunday'?sun:sat)}:\n`+rows.map(({m,n},i)=>`${i+1}. ${m.unit?`${n} × ${m.n} (${m.unit})`:`${n} × ${m.n}`} – ${money(m.p*n)}`).join('\n')+`\n\nTotal: ${money(tot)}`+(nm?`\nName: ${nm}`:'');
- s.href='https://t.me/'+CFG.tg+'?text='+encodeURIComponent(msg);
+  const rows=MENU.map((m,i)=>({m,n:q[i]})).filter(r=>r.n);
+  $('#lines').innerHTML=rows.map(({m,n})=>`<li><span>${esc(line(m,n))}</span><b>${money(m.p*n)}</b></li>`).join('');
+  $('#empty').hidden=rows.length>0;
+  const tot=rows.reduce((a,{m,n})=>a+m.p*n,0);
+  $('#total').textContent=money(tot);
+  const s=$('#send');
+  if(!rows.length){s.setAttribute('aria-disabled','true');s.href='#';return}
+  s.removeAttribute('aria-disabled');
+  const nm=$('#nm').value.trim();
+  const msg=`Hi coffee near me! Pre-order for ${day} ${f(day==='Sunday'?sun:sat)}:\n`
+    +rows.map(({m,n},i)=>`${i+1}. ${line(m,n)} – ${money(m.p*n)}`).join('\n')
+    +`\n\nTotal: ${money(tot)}`+(nm?`\nName: ${nm}`:'');
+  s.href='https://t.me/'+CFG.tg+'?text='+encodeURIComponent(msg);
 }
-draw();
+
+loadMenu().then(m=>{MENU=m;render()});
 </script>
 </body>
 </html>
